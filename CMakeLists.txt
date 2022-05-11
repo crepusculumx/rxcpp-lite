@@ -3,7 +3,9 @@ project(rxcpp-lite)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB RXCPP_LITE_SOURCES "sources/*.c++")
-add_library(rxcpp-lite ${RXCPP_LITE_SOURCES})
+file(GLOB RXCPP_LITE_SOURCES "include/rxcpp-lite/*.hpp")
 
-target_include_directories(rxcpp-lite PUBLIC include/)
+add_library(rxcpp-lite INTERFACE ${RXCPP_LITE_SOURCES})
+target_include_directories(rxcpp-lite INTERFACE include/
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+        $<INSTALL_INTERFACE:include/rxcpp-lite>)
