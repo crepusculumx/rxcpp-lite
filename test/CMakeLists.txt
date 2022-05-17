@@ -21,7 +21,10 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 #-----------------------------------------------------------------------------------------------------------------------
-file(GLOB TEST_SOURCES "sources/*.cpp")
+
+include_directories(sources)
+
+file(GLOB TEST_SOURCES "sources/*.cpp" "sources/rxcpp-lite-operators/*.cpp")
 foreach (ONE_TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(ONE_TEST_NAME "${ONE_TEST_SOURCE}" NAME)
     string(REPLACE ".cpp" "" ONE_TEST_NAME ${ONE_TEST_NAME})
