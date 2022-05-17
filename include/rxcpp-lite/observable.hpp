@@ -14,6 +14,17 @@ class Observable {
  private:
   std::function<std::function<void(void)>(Subscriber<T>)> source;
 
+  template<typename V, typename RxOperator>
+  auto pipe_from(Observable<V> observable, RxOperator rx_operator) {
+    return rx_operator.from(observable);
+  }
+
+  template<typename V, typename RxOperator, typename ...RxOperators>
+  auto pipe_from(Observable<V> observable, RxOperator rx_operator, RxOperators ...rx_operators) {
+    auto res = rx_operator.from(std::move(observable));
+    return pipe_from(std::move(res), rx_operators...);
+  }
+
  public:
   Observable() : source([](Subscriber<T>) { return []() {}; }) {}
 
@@ -34,6 +45,11 @@ class Observable {
     auto subscriber = Subscriber<T>(std::move(observer));
     auto on_unsubscribe = source(std::move(subscriber));
     return Subscription(std::move(on_unsubscribe));
+  }
+
+  template<typename ...RxOperators>
+  auto pipe(RxOperators... rx_operators) {
+    return pipe_from(*this, rx_operators...);
   }
 };
 }
