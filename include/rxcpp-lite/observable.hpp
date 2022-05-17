@@ -1,7 +1,7 @@
 #ifndef RXCPPLITE_SRC_OBSERVABLE_HPP_
 #define RXCPPLITE_SRC_OBSERVABLE_HPP_
 
-#include <functional>
+#include "rxcpp-lite-include.hpp"
 
 #include "observer.hpp"
 #include "subscriber.hpp"

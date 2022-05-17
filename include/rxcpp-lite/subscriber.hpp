@@ -5,7 +5,7 @@
 #ifndef RXCPPLITE_SRC_SUBSCRIBER_HPP_
 #define RXCPPLITE_SRC_SUBSCRIBER_HPP_
 
-#include <exception>
+#include "rxcpp-lite-include.hpp"
 
 #include "observer.hpp"
 

@@ -5,7 +5,7 @@
 #ifndef RXCPPLITE_SRC_SUBSCRIPTION_HPP_
 #define RXCPPLITE_SRC_SUBSCRIPTION_HPP_
 
-#include <functional>
+#include "rxcpp-lite-include.hpp"
 
 namespace rxcpp_lite {
 
