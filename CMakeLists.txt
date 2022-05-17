@@ -4,7 +4,7 @@ project(rxcpp-lite)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB RXCPP_LITE_SOURCES "include/rxcpp-lite/*.hpp")
+file(GLOB RXCPP_LITE_SOURCES "include/rxcpp-lite/*.hpp" "include/rxcpp-lite/rxcpp-lite-operators/*.hpp")
 
 add_library(rxcpp-lite INTERFACE)
 target_sources(rxcpp-lite INTERFACE ${RXCPP_LITE_SOURCES})
