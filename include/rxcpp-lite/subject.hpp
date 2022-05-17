@@ -19,7 +19,7 @@ template<typename T>
 class SubjectBase {
  protected:
   std::shared_ptr<std::set<std::unique_ptr<Subscriber<T>>>>
-      subscribers_ptr_{std::make_shared<std::set<std::unique_ptr<Subscriber<T>>>>()};
+      subscribers_ptr{std::make_shared<std::set<std::unique_ptr<Subscriber<T>>>>()};
 
  public:
   SubjectBase() = default;
@@ -39,7 +39,7 @@ class Subject :
   Subject() :
       detail::SubjectBase<T>(),
       Observable<T>(
-          [subscribers_ptr = this->subscribers_ptr_](rxcpp_lite::Subscriber<T> subscriber) {
+          [subscribers_ptr = this->subscribers_ptr](rxcpp_lite::Subscriber<T> subscriber) {
             auto &subscribers = *subscribers_ptr;
             auto [it, ok] =
                 subscribers.template emplace(std::make_unique<rxcpp_lite::Subscriber<T>>(std::move(subscriber)));
@@ -52,19 +52,19 @@ class Subject :
           }
       ),
       Observer<T>(
-          [subscribers_ptr = this->subscribers_ptr_](T t) {
+          [subscribers_ptr = this->subscribers_ptr](T t) {
             auto &subscribers = *subscribers_ptr;
             for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
               it->get()->template next(t);
             }
           },
-          [subscribers_ptr = this->subscribers_ptr_]() {
+          [subscribers_ptr = this->subscribers_ptr]() {
             auto &subscribers = *subscribers_ptr;
             for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
               it->get()->complete();
             }
           },
-          [subscribers_ptr_ = this->subscribers_ptr_](std::exception &e) {
+          [subscribers_ptr_ = this->subscribers_ptr](std::exception &e) {
             auto &subscribers = *subscribers_ptr_;
             for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
               it->get()->error(e);

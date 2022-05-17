@@ -14,15 +14,15 @@ namespace rxcpp_lite {
 template<typename T, typename V>
 class map {
  private:
-  std::function<V(T)> function_;
+  std::function<V(T)> map_function;
  public:
-  explicit map(std::function<V(T)> function) : function_(std::move(function)) {}
+  explicit map(std::function<V(T)> function) : map_function(std::move(function)) {}
 
   Observable<V> from(Observable<T> observable) {
     // 返回一个新Observable, 类型为转换后的V，对该Observable的订阅转为对源的订阅
     return Observable<V>{
         [observable = std::move(observable),
-            map_function = this->function_
+            map_function = this->map_function
         ](Subscriber<V> subscriber) mutable {
           auto subscriber_ptr = std::make_shared<Subscriber<V>>(std::move(subscriber));
 

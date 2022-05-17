@@ -16,8 +16,8 @@ namespace detail {
 template<typename T>
 class AsyncSubjectBase {
  protected:
-  std::shared_ptr<std::list<T>> values_ptr_{std::make_shared<std::list<T>>()};
-  std::shared_ptr<bool> is_complete_ptr_{std::make_shared<bool>(false)};
+  std::shared_ptr<std::list<T>> values_ptr{std::make_shared<std::list<T>>()};
+  std::shared_ptr<bool> is_complete_ptr{std::make_shared<bool>(false)};
 
  public:
   AsyncSubjectBase() = default;
@@ -41,9 +41,9 @@ class AsyncSubject :
       detail::AsyncSubjectBase<T>(),
       Observable<T>(
           [
-              subscribers_ptr = this->subscribers_ptr_,
-              values_ptr = this->values_ptr_,
-              is_complete_ptr = this->is_complete_ptr_
+              subscribers_ptr = this->subscribers_ptr,
+              values_ptr = this->values_ptr,
+              is_complete_ptr = this->is_complete_ptr
           ](rxcpp_lite::Subscriber<T> subscriber) {
             auto &subscribers = *subscribers_ptr;
             auto [subscriber_it, ok] =
@@ -73,18 +73,18 @@ class AsyncSubject :
       ),
       Observer<T>(
           [
-              values_ptr = this->values_ptr_,
+              values_ptr = this->values_ptr,
               buffer_size = BUFFER_SIZE,
-              is_complete_ptr = this->is_complete_ptr_
+              is_complete_ptr = this->is_complete_ptr
           ](T t) {
             auto &values = *values_ptr;
             if (values.size() == buffer_size) values.pop_front();
             values.template emplace_back(std::move(t));
           },
           [
-              subscribers_ptr = this->subscribers_ptr_,
-              values_ptr = this->values_ptr_,
-              is_complete_ptr = this->is_complete_ptr_
+              subscribers_ptr = this->subscribers_ptr,
+              values_ptr = this->values_ptr,
+              is_complete_ptr = this->is_complete_ptr
           ]() {
             auto &subscribers = *subscribers_ptr;
             auto &values = *values_ptr;
@@ -97,7 +97,7 @@ class AsyncSubject :
               subscriber_it->get()->complete();
             }
           },
-          [subscribers_ptr_ = this->subscribers_ptr_](std::exception &e) {
+          [subscribers_ptr_ = this->subscribers_ptr](std::exception &e) {
             auto &subscribers = *subscribers_ptr_;
             for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
               it->get()->error(e);
