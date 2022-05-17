@@ -2,10 +2,8 @@
 // Created by crepusculumx on 22-5-10.
 //
 
-#include <memory>
-#include <vector>
+#include "test.h"
 
-#include "gtest/gtest.h"
 #include "rxcpp-lite/observable.hpp"
 
 /**

@@ -3,9 +3,8 @@
 //
 
 
-#include <vector>
+#include "test.h"
 
-#include "gtest/gtest.h"
 #include "rxcpp-lite/observable.hpp"
 
 /**

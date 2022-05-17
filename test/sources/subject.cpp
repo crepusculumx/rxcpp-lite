@@ -2,9 +2,8 @@
 // Created by crepusculumx on 22-5-10.
 //
 
-#include <vector>
+#include "test.h"
 
-#include "gtest/gtest.h"
 #include "rxcpp-lite/subject.hpp"
 
 /**
@@ -49,7 +48,7 @@ TEST(SubjectTest, Int) {
 }
 
 /**
- * 测试Observable是多播的
+ * 测试Subject是多播的
  */
 TEST(SubjectTest, Multicast) {
   auto subject = rxcpp_lite::Subject<std::shared_ptr<int>>();
