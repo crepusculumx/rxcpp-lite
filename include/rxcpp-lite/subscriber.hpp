@@ -25,7 +25,7 @@ class Subscriber {
   Subscriber(Subscriber<T> &&subscriber) noexcept
       : observer(std::move(subscriber.observer)), is_stop(std::move(subscriber.is_stop)) {}
 
-  explicit Subscriber(const Observer<T> &observer) : observer(observer) {}
+  explicit Subscriber(Observer<T> observer) : observer(std::move(observer)) {}
 
   template<typename V>
   void next(V &&v) {
