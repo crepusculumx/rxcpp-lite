@@ -12,17 +12,24 @@ namespace rxcpp_lite {
 class Subscription {
  private:
   std::function<void(void)> on_unsubscribe;
+  bool is_stopped{false};
  public:
+  Subscription(const Subscription &) = delete;
+
+  Subscription &operator=(const Subscription &) = delete;
+
   Subscription() : on_unsubscribe([]() {}) {}
 
   explicit Subscription(std::function<void(void)> on_unsubscribe) : on_unsubscribe(std::move(on_unsubscribe)) {}
 
-  Subscription(const Subscription &subscription) = default;
-
-  Subscription(Subscription &&subscription) noexcept: on_unsubscribe(std::move(subscription.on_unsubscribe)) {}
+  Subscription(Subscription &&subscription) noexcept
+      : on_unsubscribe(std::move(subscription.on_unsubscribe)), is_stopped(subscription.is_stopped) {}
 
   void unsubscribe() {
-    on_unsubscribe();
+    if (!is_stopped) {
+      is_stopped = true;
+      on_unsubscribe();
+    }
   }
 };
 

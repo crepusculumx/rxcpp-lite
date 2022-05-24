@@ -20,7 +20,9 @@ class Subscriber {
  public:
   Subscriber() = default;
 
-  Subscriber(const Subscriber<T> &subscriber) : observer(subscriber.observer), is_stop(subscriber.is_stop) {}
+  Subscriber(const Subscriber<T> &) = delete;
+
+  Subscriber &operator=(const Subscriber &) = delete;
 
   Subscriber(Subscriber<T> &&subscriber) noexcept
       : observer(std::move(subscriber.observer)), is_stop(std::move(subscriber.is_stop)) {}
