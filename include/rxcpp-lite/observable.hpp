@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
 #ifndef RXCPPLITE_SRC_OBSERVABLE_HPP_
 #define RXCPPLITE_SRC_OBSERVABLE_HPP_
 
@@ -16,12 +19,12 @@ class Observable {
 
   template<typename V, typename RxOperator>
   auto pipe_from(Observable<V> observable, RxOperator rx_operator) {
-    return rx_operator.from(observable);
+    return rx_operator(observable);
   }
 
   template<typename V, typename RxOperator, typename ...RxOperators>
   auto pipe_from(Observable<V> observable, RxOperator rx_operator, RxOperators ...rx_operators) {
-    auto res = rx_operator.from(std::move(observable));
+    auto res = rx_operator(std::move(observable));
     return pipe_from(std::move(res), rx_operators...);
   }
 
@@ -54,3 +57,5 @@ class Observable {
 };
 }
 #endif //RXCPPLITE_SRC_OBSERVABLE_HPP_
+
+#pragma clang diagnostic pop

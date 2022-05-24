@@ -18,13 +18,13 @@ class map {
  public:
   explicit map(std::function<V(T)> function) : map_function(std::move(function)) {}
 
-  Observable<V> from(Observable<T> observable) {
+  Observable<V> operator()(Observable<T> observable) {
     // 返回一个新Observable, 类型为转换后的V，对该Observable的订阅转为对源的订阅
     return Observable<V>{
         [observable = std::move(observable),
             map_function = this->map_function
         ](Subscriber<V> subscriber) mutable {
-          auto subscriber_ptr = std::make_shared<Subscriber<V>>(std::move(subscriber));
+          auto subscriber_ptr = std::make_shared<Subscriber<V >>(std::move(subscriber));
 
           auto subscription = observable.subscribe(Observer<T>{
               [subscriber_ptr, map_function = std::move(map_function)](T t) {
@@ -34,8 +34,9 @@ class map {
               [subscriber_ptr](std::exception &e) { subscriber_ptr->error(e); }
           });
 
-          return [subscription]() mutable {
-            subscription.unsubscribe();
+          auto subscription_ptr = std::make_shared<Subscription>(std::move(subscription));
+          return [subscription_ptr = std::move(subscription_ptr)]() {
+            subscription_ptr->unsubscribe();
           };
         }};
   }
