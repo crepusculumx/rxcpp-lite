@@ -23,10 +23,10 @@ class SubjectBase {
 
  public:
   SubjectBase() = default;
-  SubjectBase(const SubjectBase &) = delete;
-  SubjectBase(SubjectBase &&) = delete;
-  SubjectBase &operator=(const SubjectBase &) = delete;
-  SubjectBase &operator=(SubjectBase &&) = delete;
+  SubjectBase(const SubjectBase &) = default;
+  SubjectBase(SubjectBase &&) noexcept = default;
+  SubjectBase &operator=(const SubjectBase &) = default;
+  SubjectBase &operator=(SubjectBase &&) noexcept = default;
 };
 }
 
@@ -44,7 +44,11 @@ class Subject :
             auto [it, ok] =
                 subscribers.template emplace(std::make_unique<rxcpp_lite::Subscriber<T>>(std::move(subscriber)));
 
-            return [subscribers_ptr = std::move(subscribers_ptr), subscriber_it = it, emplace_ok = ok]() {
+            return [
+                subscribers_ptr = std::move(subscribers_ptr),
+                subscriber_it = std::move(it),
+                emplace_ok = ok
+            ]() {
               if (!emplace_ok) return;
               auto &subscribers = *subscribers_ptr;
               subscribers.erase(subscriber_it);
@@ -64,14 +68,17 @@ class Subject :
               it->get()->complete();
             }
           },
-          [subscribers_ptr_ = this->subscribers_ptr](std::exception &e) {
-            auto &subscribers = *subscribers_ptr_;
+          [subscribers_ptr = this->subscribers_ptr](std::exception &e) {
+            auto &subscribers = *subscribers_ptr;
             for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
               it->get()->error(e);
             }
           }
       ) {}
 
+  Observable<T> asObservable() {
+    return Observable<T>(*this);
+  }
 };
 
 }

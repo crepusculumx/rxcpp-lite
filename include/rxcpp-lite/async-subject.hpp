@@ -21,10 +21,10 @@ class AsyncSubjectBase {
 
  public:
   AsyncSubjectBase() = default;
-  AsyncSubjectBase(const AsyncSubjectBase &) = delete;
-  AsyncSubjectBase(AsyncSubjectBase &&) = delete;
-  AsyncSubjectBase &operator=(const AsyncSubjectBase &) = delete;
-  AsyncSubjectBase &operator=(AsyncSubjectBase &&) = delete;
+  AsyncSubjectBase(const AsyncSubjectBase &) = default;
+  AsyncSubjectBase(AsyncSubjectBase &&) noexcept = default;
+  AsyncSubjectBase &operator=(const AsyncSubjectBase &) = default;
+  AsyncSubjectBase &operator=(AsyncSubjectBase &&) noexcept = default;
 };
 
 }
@@ -105,6 +105,9 @@ class AsyncSubject :
           }
       ) {}
 
+  Observable<T> asObservable() {
+    return Observable<T>(*this);
+  }
 };
 }
 
